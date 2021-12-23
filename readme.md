@@ -7,9 +7,9 @@ This contains a Quartus Prime Verilog HDL project that demonstrates the FPGA por
 ## Running instructions
 
 1. Write the sdcard_de10nano.img to a micro SD card.  Use any of these:
-- Win32 Disk Imager (https://sourceforge.net/projects/win32diskimager/)
-- Rufus (https://rufus.ie/en/)
-- balenaEtcher (https://www.balena.io/etcher/)
+   - Win32 Disk Imager (https://sourceforge.net/projects/win32diskimager/)
+   - Rufus (https://rufus.ie/en/)
+   - balenaEtcher (https://www.balena.io/etcher/)
 2. Connect a USB cable between the UART-USB connector on the DE10-Nano and your computer
 3. Start a serial console program such as PuTTY and set it to serial mode, 115200 baud, 8 data bits, 1 stop bit, no control flow
 4. Insert the micro SD card into the DE10-Nano and turn on the 5V power supply
@@ -40,7 +40,7 @@ Note, I've configured U-Boot so it doesn't boot to a Linux system or a user bare
 - [Quartus Prime 21.1 Lite Edition for Linux](https://www.intel.co.uk/content/www/uk/en/software/programmable/quartus-prime/download.html)
 - [Quartus SoC EDS 20.1 for Linux](https://fpgasoftware.intel.com/soceds)
 - [U-Boot source socfpga fork v2021.07](https://github.com/altera-opensource/u-boot-socfpga)
-- [GNU Arm Embedded Toolchain 10.3-2021.07 for Linux x86 64] (https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-a/downloads)
+- [GNU Arm Embedded Toolchain 10.3-2021.07 for Linux x86 64](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-a/downloads)
 
 Older versions should work just as well, but for older Quartus you'll need to create a new project:
 - add the Verilog files (.v)
@@ -49,13 +49,13 @@ Older versions should work just as well, but for older Quartus you'll need to cr
 
 ## Building a SD card image
 
-Follow this nice guide on how to build U-Boot and SD card image:
+Follow this nice guide on how to build U-Boot and SD card image:<br />
 https://rocketboards.org/foswiki/Documentation/BuildingBootloaderCycloneVAndArria10
 
-Amend it with this guide to boot FPGA .rbf file from a U-Boot script:
+Amend it with this guide to boot FPGA .rbf file from a U-Boot script:<br />
 https://github.com/zangman/de10-nano/wiki/Creating-a-Bootscript
 
 ## For more info and other projects
 
-Visit my personal website at:
+Visit my personal website at:<br />
 https://trueapps.co.uk

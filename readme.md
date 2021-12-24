@@ -11,7 +11,7 @@ This contains a Quartus Prime Verilog HDL project that demonstrates the FPGA por
    - Rufus (https://rufus.ie/en/)
    - balenaEtcher (https://www.balena.io/etcher/)
 2. Connect a USB cable between the UART-USB connector on the DE10-Nano and your computer
-3. Start a serial console program such as PuTTY and set it to serial mode, 115200 baud, 8 data bits, 1 stop bit, no control flow
+3. Start a serial console program such as PuTTY and set it to serial mode, 115200 baud, 8 data bits, 1 stop bit, no parity, no control flow
 4. Insert the micro SD card into the DE10-Nano and turn on the 5V power supply
 5. Wait for U-Boot to boot up.  You should see a bunch of U-Boot messages and then stop with a console prompt
 6. If the FPGA is configured LED7 should be blinking now
@@ -44,7 +44,7 @@ Note, I've configured U-Boot so it doesn't boot to a Linux system or a user bare
 
 Older versions should work just as well, but for older Quartus you'll need to create a new project:
 - add the Verilog files (.v)
-- add pin assignment settings using a text editor in Quartus file (.qsf) or recreate the pin assignments (matching DE10-Nano) using Quartus Prime pin assignment editor
+- add pin assignment settings using a text editor in Quartus file (.qsf) or recreate the pin assignments (matching DE10-Nano) using Quartus Prime Pin Planner or Assignment Editor
 - configure HPS in Platform Designer (Qsys in older versions)
 
 ## Building a SD card image
@@ -57,5 +57,5 @@ https://github.com/zangman/de10-nano/wiki/Creating-a-Bootscript
 
 ## For more info and other projects
 
-Visit my personal website at:<br />
-https://trueapps.co.uk
+Visit my personal website for a little more info at:<br />
+https://trueapps.co.uk/F2hUart

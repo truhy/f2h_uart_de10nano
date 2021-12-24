@@ -1,41 +1,11 @@
 # Ignore these folders..
-hps_isw_handoff/
-output_files/
-sdcard_build_script/
-sdcard_image/
-soc_system/
+output_files/*
 incremental_db/
 db/
-.qsys_edit/
 simulation/
 timing/
 testbench/
 *_sim/
 
-# ignore these files..
-*_generation_script*
-*_inst.vhd
-*.bak
-*.cmp
-*.done
-*.eqn
-*.hex
-*.html
-*.jdi
-*.jpg
-*.pin
-*.pof
-*.ptf.*
-*.qar
-*.qarlog
-*.qws
-*.rpt
-*.smsg
-*.sof
-*.sopc_builder
-*.summary
-*.tcl
-*.txt
-*~
-*example*
-*sopc_*
+# Don't ignore these..
+!output_files/*.sof

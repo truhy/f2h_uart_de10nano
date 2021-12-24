@@ -33,7 +33,7 @@
 	
 	AXI spec notes:
 	
-	Each data transfer (aka burst transfer) is defined by burst size, e.g. if burst size is 2 bytes then it will transfer 2^2 = 4 bytes in each transfer.
+	Each data transfer (aka burst transfer) is defined by burst size, e.g. if burst size is 2 then it will transfer 2^2 = 4 bytes in each transfer.
 	
 	The parameter RD_AXI_MAX_BURST is the maximum burst length allowed (number of bus transfers) a range 1 to 16 (AXI 3).
 */

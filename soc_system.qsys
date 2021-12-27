@@ -67,6 +67,16 @@
  <interface name="clk" internal="clk_0.clk_in" type="clock" dir="end" />
  <interface name="f2h_sdram0_clock" internal="hps_0.f2h_sdram0_clock" />
  <interface name="f2h_sdram0_data" internal="hps_0.f2h_sdram0_data" />
+ <interface
+   name="hps_0_f2h_axi_clock"
+   internal="hps_0.f2h_axi_clock"
+   type="clock"
+   dir="end" />
+ <interface
+   name="hps_0_f2h_axi_slave"
+   internal="hps_0.f2h_axi_slave"
+   type="axi"
+   dir="end" />
  <interface name="hps_0_f2h_stm_hw_events" internal="hps_0.f2h_stm_hw_events" />
  <interface name="hps_0_h2f_lw_axi_clock" internal="hps_0.h2f_lw_axi_clock" />
  <interface
@@ -74,21 +84,15 @@
    internal="hps_0.h2f_reset"
    type="reset"
    dir="start" />
- <interface
-   name="hps_f2h_axi_clock"
-   internal="hps_0.f2h_axi_clock"
-   type="clock"
-   dir="end" />
- <interface
-   name="hps_f2h_axi_slave"
-   internal="hps_0.f2h_axi_slave"
-   type="axi"
-   dir="end" />
  <interface name="hps_h2f_loan_io" internal="hps_0.h2f_loan_io" />
  <interface name="hps_io" internal="hps_0.hps_io" type="conduit" dir="end" />
  <interface name="memory" internal="hps_0.memory" type="conduit" dir="end" />
- <interface name="pll_0_clock" internal="pll_0.outclk0" type="clock" dir="start" />
  <interface name="pll_0_locked" internal="pll_0.locked" type="conduit" dir="end" />
+ <interface
+   name="pll_0_outclk0"
+   internal="pll_0.outclk0"
+   type="clock"
+   dir="start" />
  <interface name="reset" internal="clk_0.clk_in_reset" type="reset" dir="end" />
  <module name="clk_0" kind="clock_source" version="21.1" enabled="1">
   <parameter name="clockFrequency" value="50000000" />

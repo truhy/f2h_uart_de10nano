@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EnsembleReport name="soc_system" kind="soc_system" version="1.0" fabric="QSYS">
  <!-- Format version 21.1 842 (Future versions may contain additional information.) -->
- <!-- 2021.12.12.11:23:15 -->
+ <!-- 2021.12.27.22:46:14 -->
  <!-- A collection of modules and connections -->
  <parameter name="AUTO_GENERATION_ID">
   <type>java.lang.Integer</type>
-  <value>1639308179</value>
+  <value>1640645158</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>false</visible>
@@ -78,7 +78,7 @@
   <sysinfo_type>RESET_DOMAIN</sysinfo_type>
   <sysinfo_arg>clk</sysinfo_arg>
  </parameter>
- <parameter name="AUTO_HPS_F2H_AXI_CLOCK_CLOCK_RATE">
+ <parameter name="AUTO_HPS_0_F2H_AXI_CLOCK_CLOCK_RATE">
   <type>java.lang.Long</type>
   <value>-1</value>
   <derived>false</derived>
@@ -86,9 +86,9 @@
   <visible>false</visible>
   <valid>true</valid>
   <sysinfo_type>CLOCK_RATE</sysinfo_type>
-  <sysinfo_arg>hps_f2h_axi_clock</sysinfo_arg>
+  <sysinfo_arg>hps_0_f2h_axi_clock</sysinfo_arg>
  </parameter>
- <parameter name="AUTO_HPS_F2H_AXI_CLOCK_CLOCK_DOMAIN">
+ <parameter name="AUTO_HPS_0_F2H_AXI_CLOCK_CLOCK_DOMAIN">
   <type>java.lang.Integer</type>
   <value>-1</value>
   <derived>false</derived>
@@ -96,9 +96,9 @@
   <visible>false</visible>
   <valid>true</valid>
   <sysinfo_type>CLOCK_DOMAIN</sysinfo_type>
-  <sysinfo_arg>hps_f2h_axi_clock</sysinfo_arg>
+  <sysinfo_arg>hps_0_f2h_axi_clock</sysinfo_arg>
  </parameter>
- <parameter name="AUTO_HPS_F2H_AXI_CLOCK_RESET_DOMAIN">
+ <parameter name="AUTO_HPS_0_F2H_AXI_CLOCK_RESET_DOMAIN">
   <type>java.lang.Integer</type>
   <value>-1</value>
   <derived>false</derived>
@@ -106,7 +106,7 @@
   <visible>false</visible>
   <valid>true</valid>
   <sysinfo_type>RESET_DOMAIN</sysinfo_type>
-  <sysinfo_arg>hps_f2h_axi_clock</sysinfo_arg>
+  <sysinfo_arg>hps_0_f2h_axi_clock</sysinfo_arg>
  </parameter>
  <parameter name="deviceFamily">
   <type>java.lang.String</type>

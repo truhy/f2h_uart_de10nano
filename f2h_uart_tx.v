@@ -1,7 +1,7 @@
 /*
-	This source file is Freeware
+    This source file is Freeware
 
-	Developer: Truong Hy
+    Developer: Truong Hy
     HDL      : Verilog
     Target   : For the DE10-Nano development kit board (SoC FPGA Cyclone V)
     Version  : 1.0
@@ -150,7 +150,7 @@ module f2h_uart_tx(
 	soc_system u0(
 		// Clock
 		.clk_clk(FPGA_CLK1_50),
-		.pll_0_clock_clk(pll_0_clock),
+		.pll_0_outclk0_clk(pll_0_clock),
 		.pll_0_locked_export(pll_0_locked),
 
 		// HPS DDR-3 SDRAM pin connections
@@ -183,7 +183,7 @@ module f2h_uart_tx(
 		.hps_io_hps_io_uart0_inst_RX(HPS_UART_RX),
 		.hps_io_hps_io_uart0_inst_TX(HPS_UART_TX),
 		
-		//HPS EMAC (ethernet) pin connections
+		// HPS EMAC (ethernet) pin connections
 		.hps_io_hps_io_emac1_inst_TX_CLK(HPS_ENET_GTX_CLK),
 		.hps_io_hps_io_emac1_inst_TXD0(HPS_ENET_TX_DATA[0]),
 		.hps_io_hps_io_emac1_inst_TXD1(HPS_ENET_TX_DATA[1]),
@@ -199,7 +199,7 @@ module f2h_uart_tx(
 		.hps_io_hps_io_emac1_inst_RXD2(HPS_ENET_RX_DATA[2]),
 		.hps_io_hps_io_emac1_inst_RXD3(HPS_ENET_RX_DATA[3]),
 
-		//HPS USB 2.0 OTG pin connections
+		// HPS USB 2.0 OTG pin connections
 		.hps_io_hps_io_usb1_inst_D0(HPS_USB_DATA[0]),
 		.hps_io_hps_io_usb1_inst_D1(HPS_USB_DATA[1]),
 		.hps_io_hps_io_usb1_inst_D2(HPS_USB_DATA[2]),
@@ -227,45 +227,45 @@ module f2h_uart_tx(
 		.hps_io_hps_io_i2c1_inst_SCL(HPS_I2C1_SCLK),
 		
 		// AXI interface to FPGA-to-HPS Bridge (4GB address map via L3 Interconnect. See Interconnect Block Diagram in Cyclone V Tech Ref Man.)
-		.hps_f2h_axi_clock_clk(pll_0_clock),
-		.hps_f2h_axi_slave_awid(f2h_axi_slave_awid),
-		.hps_f2h_axi_slave_awaddr(f2h_axi_slave_awaddr),
-		.hps_f2h_axi_slave_awlen(f2h_axi_slave_awlen),
-		.hps_f2h_axi_slave_awsize(f2h_axi_slave_awsize),
-		.hps_f2h_axi_slave_awburst(f2h_axi_slave_awburst),
-		.hps_f2h_axi_slave_awlock(f2h_axi_slave_awlock),
-		.hps_f2h_axi_slave_awcache(f2h_axi_slave_awcache),
-		.hps_f2h_axi_slave_awprot(f2h_axi_slave_awprot),
-		.hps_f2h_axi_slave_awvalid(f2h_axi_slave_awvalid),
-		.hps_f2h_axi_slave_awready(f2h_axi_slave_awready),
-		.hps_f2h_axi_slave_awuser(f2h_axi_slave_awuser),
-		.hps_f2h_axi_slave_wid(f2h_axi_slave_wid),
-		.hps_f2h_axi_slave_wdata(f2h_axi_slave_wdata),
-		.hps_f2h_axi_slave_wstrb(f2h_axi_slave_wstrb),
-		.hps_f2h_axi_slave_wlast(f2h_axi_slave_wlast),
-		.hps_f2h_axi_slave_wvalid(f2h_axi_slave_wvalid),
-		.hps_f2h_axi_slave_wready(f2h_axi_slave_wready),
-		.hps_f2h_axi_slave_bid(f2h_axi_slave_bid),
-		.hps_f2h_axi_slave_bresp(f2h_axi_slave_bresp),
-		.hps_f2h_axi_slave_bvalid(f2h_axi_slave_bvalid),
-		.hps_f2h_axi_slave_bready(f2h_axi_slave_bready),
-		.hps_f2h_axi_slave_arid(f2h_axi_slave_arid),
-		.hps_f2h_axi_slave_araddr(f2h_axi_slave_araddr),
-		.hps_f2h_axi_slave_arlen(f2h_axi_slave_arlen),
-		.hps_f2h_axi_slave_arsize(f2h_axi_slave_arsize),
-		.hps_f2h_axi_slave_arburst(f2h_axi_slave_arburst),
-		.hps_f2h_axi_slave_arlock(f2h_axi_slave_arlock),
-		.hps_f2h_axi_slave_arcache(f2h_axi_slave_arcache),
-		.hps_f2h_axi_slave_arprot(f2h_axi_slave_arprot),
-		.hps_f2h_axi_slave_arvalid(f2h_axi_slave_arvalid),
-		.hps_f2h_axi_slave_arready(f2h_axi_slave_arready),
-		.hps_f2h_axi_slave_aruser(f2h_axi_slave_aruser),
-		.hps_f2h_axi_slave_rid(f2h_axi_slave_rid),
-		.hps_f2h_axi_slave_rdata(f2h_axi_slave_rdata),
-		.hps_f2h_axi_slave_rresp(f2h_axi_slave_rresp),
-		.hps_f2h_axi_slave_rlast(f2h_axi_slave_rlast),
-		.hps_f2h_axi_slave_rvalid(f2h_axi_slave_rvalid),
-		.hps_f2h_axi_slave_rready(f2h_axi_slave_rready),
+		.hps_0_f2h_axi_clock_clk(pll_0_clock),
+		.hps_0_f2h_axi_slave_awid(f2h_axi_slave_awid),
+		.hps_0_f2h_axi_slave_awaddr(f2h_axi_slave_awaddr),
+		.hps_0_f2h_axi_slave_awlen(f2h_axi_slave_awlen),
+		.hps_0_f2h_axi_slave_awsize(f2h_axi_slave_awsize),
+		.hps_0_f2h_axi_slave_awburst(f2h_axi_slave_awburst),
+		.hps_0_f2h_axi_slave_awlock(f2h_axi_slave_awlock),
+		.hps_0_f2h_axi_slave_awcache(f2h_axi_slave_awcache),
+		.hps_0_f2h_axi_slave_awprot(f2h_axi_slave_awprot),
+		.hps_0_f2h_axi_slave_awvalid(f2h_axi_slave_awvalid),
+		.hps_0_f2h_axi_slave_awready(f2h_axi_slave_awready),
+		.hps_0_f2h_axi_slave_awuser(f2h_axi_slave_awuser),
+		.hps_0_f2h_axi_slave_wid(f2h_axi_slave_wid),
+		.hps_0_f2h_axi_slave_wdata(f2h_axi_slave_wdata),
+		.hps_0_f2h_axi_slave_wstrb(f2h_axi_slave_wstrb),
+		.hps_0_f2h_axi_slave_wlast(f2h_axi_slave_wlast),
+		.hps_0_f2h_axi_slave_wvalid(f2h_axi_slave_wvalid),
+		.hps_0_f2h_axi_slave_wready(f2h_axi_slave_wready),
+		.hps_0_f2h_axi_slave_bid(f2h_axi_slave_bid),
+		.hps_0_f2h_axi_slave_bresp(f2h_axi_slave_bresp),
+		.hps_0_f2h_axi_slave_bvalid(f2h_axi_slave_bvalid),
+		.hps_0_f2h_axi_slave_bready(f2h_axi_slave_bready),
+		.hps_0_f2h_axi_slave_arid(f2h_axi_slave_arid),
+		.hps_0_f2h_axi_slave_araddr(f2h_axi_slave_araddr),
+		.hps_0_f2h_axi_slave_arlen(f2h_axi_slave_arlen),
+		.hps_0_f2h_axi_slave_arsize(f2h_axi_slave_arsize),
+		.hps_0_f2h_axi_slave_arburst(f2h_axi_slave_arburst),
+		.hps_0_f2h_axi_slave_arlock(f2h_axi_slave_arlock),
+		.hps_0_f2h_axi_slave_arcache(f2h_axi_slave_arcache),
+		.hps_0_f2h_axi_slave_arprot(f2h_axi_slave_arprot),
+		.hps_0_f2h_axi_slave_arvalid(f2h_axi_slave_arvalid),
+		.hps_0_f2h_axi_slave_arready(f2h_axi_slave_arready),
+		.hps_0_f2h_axi_slave_aruser(f2h_axi_slave_aruser),
+		.hps_0_f2h_axi_slave_rid(f2h_axi_slave_rid),
+		.hps_0_f2h_axi_slave_rdata(f2h_axi_slave_rdata),
+		.hps_0_f2h_axi_slave_rresp(f2h_axi_slave_rresp),
+		.hps_0_f2h_axi_slave_rlast(f2h_axi_slave_rlast),
+		.hps_0_f2h_axi_slave_rvalid(f2h_axi_slave_rvalid),
+		.hps_0_f2h_axi_slave_rready(f2h_axi_slave_rready),
 
 		// Reset
 		.hps_0_h2f_reset_reset_n(hps_reset_n),
@@ -275,11 +275,14 @@ module f2h_uart_tx(
 	// For my AXI reader and writer modules
 	localparam RD_AXI_ADDR_WIDTH = 32;
 	localparam RD_AXI_BUS_WIDTH = 32;  // Should match the HPS AXI bridge FPGA-to-HPS interface width in Platform Designer
-	localparam RD_AXI_MAX_BURST = 1;
+	localparam RD_AXI_MAX_BURST_LEN = 1;
+	localparam WR_AXI_ADDR_WIDTH = 32;
+	localparam WR_AXI_BUS_WIDTH = 32;  // Should match the HPS AXI bridge FPGA-to-HPS interface width in Platform Designer
+	localparam WR_AXI_MAX_BURST_LEN = 1;
 	
 	reg rd_axi_enable;
 	reg [RD_AXI_ADDR_WIDTH-1:0] rd_axi_addr;
-	wire [RD_AXI_BUS_WIDTH*RD_AXI_MAX_BURST-1:0] rd_axi_data;
+	wire [RD_AXI_BUS_WIDTH*RD_AXI_MAX_BURST_LEN-1:0] rd_axi_data;
 	reg [3:0] rd_axi_burst_len;
 	reg [2:0] rd_axi_burst_size;
 	wire [1:0] rd_axi_status;	
@@ -287,7 +290,7 @@ module f2h_uart_tx(
 	rd_axi #(
 		.RD_AXI_ADDR_WIDTH(RD_AXI_ADDR_WIDTH),
 		.RD_AXI_BUS_WIDTH(RD_AXI_BUS_WIDTH),
-		.RD_AXI_MAX_BURST(RD_AXI_MAX_BURST)
+		.RD_AXI_MAX_BURST_LEN(RD_AXI_MAX_BURST_LEN)
 	) rd_axi_inst(
 		.clock(pll_0_clock),
 		.reset(my_reset),
@@ -313,13 +316,9 @@ module f2h_uart_tx(
 		.r_ready(f2h_axi_slave_rready)
 	);
 
-    localparam WR_AXI_ADDR_WIDTH = 32;
-	localparam WR_AXI_BUS_WIDTH = 32;  // Should match the HPS AXI bridge FPGA-to-HPS interface width in Platform Designer
-	localparam WR_AXI_MAX_BURST = 1;	
-
 	reg wr_axi_enable;
 	reg [WR_AXI_ADDR_WIDTH-1:0] wr_axi_addr;
-	reg [WR_AXI_BUS_WIDTH*WR_AXI_MAX_BURST-1:0] wr_axi_data;
+	reg [WR_AXI_BUS_WIDTH*WR_AXI_MAX_BURST_LEN-1:0] wr_axi_data;
 	reg [3:0] wr_axi_burst_len;
 	reg [2:0] wr_axi_burst_size;
 	reg [3:0] wr_axi_burst_mask;
@@ -328,7 +327,7 @@ module f2h_uart_tx(
 	wr_axi #(
 		.WR_AXI_ADDR_WIDTH(WR_AXI_ADDR_WIDTH),
 		.WR_AXI_BUS_WIDTH(WR_AXI_BUS_WIDTH),
-		.WR_AXI_MAX_BURST(WR_AXI_MAX_BURST)
+		.WR_AXI_MAX_BURST_LEN(WR_AXI_MAX_BURST_LEN)
 	) wr_axi_inst(
 		.clock(pll_0_clock),
 		.reset(my_reset),
@@ -361,7 +360,7 @@ module f2h_uart_tx(
 	// AXI reader wires for passing to uart dev module
 	wire rd_axi_enable_uart;
 	wire [RD_AXI_ADDR_WIDTH-1:0] rd_axi_addr_uart;
-	wire [RD_AXI_BUS_WIDTH*RD_AXI_MAX_BURST-1:0] rd_axi_data_uart;
+	wire [RD_AXI_BUS_WIDTH*RD_AXI_MAX_BURST_LEN-1:0] rd_axi_data_uart;
 	wire [3:0] rd_axi_burst_len_uart;
 	wire [2:0] rd_axi_burst_size_uart;
 	wire [1:0] rd_axi_status_uart;
@@ -375,7 +374,7 @@ module f2h_uart_tx(
 	// AXI writer wires for passing to uart dev module
 	wire wr_axi_enable_uart;
 	wire [WR_AXI_ADDR_WIDTH-1:0] wr_axi_addr_uart;
-	wire [WR_AXI_BUS_WIDTH*WR_AXI_MAX_BURST-1:0] wr_axi_data_uart;
+	wire [WR_AXI_BUS_WIDTH*WR_AXI_MAX_BURST_LEN-1:0] wr_axi_data_uart;
 	wire [3:0] wr_axi_burst_len_uart;
 	wire [2:0] wr_axi_burst_size_uart;
 	wire [3:0] wr_axi_burst_mask_uart;
@@ -403,10 +402,10 @@ module f2h_uart_tx(
 		.UART_DATA_BUF_LEN(1),
 		.RD_AXI_ADDR_WIDTH(RD_AXI_ADDR_WIDTH),
 		.RD_AXI_BUS_WIDTH(RD_AXI_BUS_WIDTH),
-		.RD_AXI_MAX_BURST(RD_AXI_MAX_BURST),
+		.RD_AXI_MAX_BURST_LEN(RD_AXI_MAX_BURST_LEN),
 		.WR_AXI_ADDR_WIDTH(WR_AXI_ADDR_WIDTH),
 		.WR_AXI_BUS_WIDTH(WR_AXI_BUS_WIDTH),
-		.WR_AXI_MAX_BURST(WR_AXI_MAX_BURST)
+		.WR_AXI_MAX_BURST_LEN(WR_AXI_MAX_BURST_LEN)
 	) uart_dev_inst(
 		.clock(pll_0_clock),
 		.reset(my_reset),

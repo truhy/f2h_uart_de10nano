@@ -1,21 +1,80 @@
 /*
-    This source file is Freeware
+	MIT License
 
-    Developer: Truong Hy
-    HDL      : Verilog
-    Target   : For the DE10-Nano development kit board (SoC FPGA Cyclone V)
-    Version  : 1.0
+	Copyright (c) 2020 Truong Hy
+	
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+	The above copyright notice and this permission notice shall be included in all
+	copies or substantial portions of the Software.
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+	SOFTWARE.
+
+	Developer: Truong Hy
+	HDL      : Verilog
+	Target   : For the DE10-Nano development kit board (SoC FPGA Cyclone V)
+	Version  : 1.1
     
-    A hardware design showing the FPGA portion directly sending a serial message to the DE10-Nano's UART-USB.
-    It achieves this using the FPGA-to-HPS bridge and HPS UART0 controller (hard-IP).
+	A hardware design showing the FPGA portion directly sending a serial message to the DE10-Nano's UART-USB.
+	It achieves this using the FPGA-to-HPS bridge and HPS UART0 controller (hard-IP).
 
-    See readme.md for more information.
+	See readme.md for more information.
 */
 module f2h_uart_tx(
-	// Clock
+	// FPGA clock
 	input FPGA_CLK1_50,
 	input FPGA_CLK2_50,
 	input FPGA_CLK3_50,
+	
+	// FPGA ADC LTC2308 (SPI)
+	/*
+	output ADC_CONVST,
+	output ADC_SCK,
+	output ADC_SDI,
+	input  ADC_SDO,
+	*/
+	
+	// FPGA Arduino IO
+	/*
+	inout [15:0] ARDUINO_IO,
+	inout        ARDUINO_RESET_N,
+	*/
+	
+	// FPGA GPIO
+	/*
+	inout [35:0] GPIO_0,
+	inout [35:0] GPIO_1,
+	*/
+	
+	// FPGA HDMI
+	/*
+	inout          HDMI_I2C_SCL,
+	inout          HDMI_I2C_SDA,
+	inout          HDMI_I2S,
+	inout          HDMI_LRCLK,
+	inout          HDMI_MCLK,
+	inout          HDMI_SCLK,
+	output         HDMI_TX_CLK,
+	output [23: 0] HDMI_TX_D,
+	output         HDMI_TX_DE,
+	output         HDMI_TX_HS,
+	input          HDMI_TX_INT,
+	output         HDMI_TX_VS,
+	*/
+
+	// FPGA push button, LEDs and slide switches
+	input  [1:0] KEY,
+	output [7:0] LED,
+	input  [3:0] SW,
 
 	// HPS DDR-3 SDRAM
 	output [14:0] HPS_DDR3_ADDR,
@@ -44,7 +103,14 @@ module f2h_uart_tx(
 	input  HPS_UART_RX,
 	output HPS_UART_TX,
 	
-	// HPS EMAC (ethernet)
+	// HPS USB OTG
+	input       HPS_USB_CLKOUT,
+	inout [7:0] HPS_USB_DATA,
+	input       HPS_USB_DIR,
+	input       HPS_USB_NXT,
+	output      HPS_USB_STP,
+	
+	// HPS EMAC (Ethernet)
 	output       HPS_ENET_GTX_CLK,
 	inout        HPS_ENET_INT_N,
 	output       HPS_ENET_MDC,
@@ -55,50 +121,25 @@ module f2h_uart_tx(
 	output [3:0] HPS_ENET_TX_DATA,
 	output       HPS_ENET_TX_EN,
 
-	// HPS USB OTG
-	input       HPS_USB_CLKOUT,
-	inout [7:0] HPS_USB_DATA,
-	input       HPS_USB_DIR,
-	input       HPS_USB_NXT,
-	output      HPS_USB_STP,
-
-	// HPS SPI
+	// HPS SPI (hardwired to the LTC 2x7 connector)
 	output HPS_SPIM_CLK,
 	input  HPS_SPIM_MISO,
 	output HPS_SPIM_MOSI,
 	inout  HPS_SPIM_SS,
 	
-	// HPS I2C 0
+	// HPS Accelerometer interrupt line (a physical pin)
+	//inout HPS_GSENSOR_INT,
+	
+	// Disabled because 0ohm resistor is not populated (hardwired to the LTC 2x7 connector)
+	//inout HPS_LTC_GPIO,
+	
+	// HPS I2C 0 (hardwired to the Accelerometer)
 	inout HPS_I2C0_SCLK,
 	inout HPS_I2C0_SDAT,
 	
-	// HPS I2C 1
+	// HPS I2C 1 (hardwired to the LTC 2x7 connector)
 	inout HPS_I2C1_SCLK,
-	inout HPS_I2C1_SDAT,
-	
-	// HPS Accelerometer
-	//inout          HPS_GSENSOR_INT,
-	
-	// FPGA-HPS HDMI
-	/*
-	inout          HDMI_I2C_SCL,
-	inout          HDMI_I2C_SDA,
-	inout          HDMI_I2S,
-	inout          HDMI_LRCLK,
-	inout          HDMI_MCLK,
-	inout          HDMI_SCLK,
-	output         HDMI_TX_CLK,
-	output [23: 0] HDMI_TX_D,
-	output         HDMI_TX_DE,
-	output         HDMI_TX_HS,
-	input          HDMI_TX_INT,
-	output         HDMI_TX_VS,
-	*/
-
-	// FPGA push button, LEDs and switches
-	input  [1:0] KEY,
-	output [7:0] LED,
-	input  [3:0] SW
+	inout HPS_I2C1_SDAT
 );
 	// Wires for the PLL clock and reset
 	wire pll_0_clock;
@@ -179,11 +220,11 @@ module f2h_uart_tx(
 		.hps_io_hps_io_sdio_inst_D2(HPS_SD_DATA[2]),
 		.hps_io_hps_io_sdio_inst_D3(HPS_SD_DATA[3]),
 		
-		// HPS UART (UART-USB) pin connections
+		// HPS UART0 (UART-USB) pin connections
 		.hps_io_hps_io_uart0_inst_RX(HPS_UART_RX),
 		.hps_io_hps_io_uart0_inst_TX(HPS_UART_TX),
 		
-		// HPS EMAC (ethernet) pin connections
+		// HPS EMAC1 (Ethernet) pin connections
 		.hps_io_hps_io_emac1_inst_TX_CLK(HPS_ENET_GTX_CLK),
 		.hps_io_hps_io_emac1_inst_TXD0(HPS_ENET_TX_DATA[0]),
 		.hps_io_hps_io_emac1_inst_TXD1(HPS_ENET_TX_DATA[1]),
@@ -199,7 +240,7 @@ module f2h_uart_tx(
 		.hps_io_hps_io_emac1_inst_RXD2(HPS_ENET_RX_DATA[2]),
 		.hps_io_hps_io_emac1_inst_RXD3(HPS_ENET_RX_DATA[3]),
 
-		// HPS USB 2.0 OTG pin connections
+		// HPS USB1 2.0 OTG pin connections
 		.hps_io_hps_io_usb1_inst_D0(HPS_USB_DATA[0]),
 		.hps_io_hps_io_usb1_inst_D1(HPS_USB_DATA[1]),
 		.hps_io_hps_io_usb1_inst_D2(HPS_USB_DATA[2]),
@@ -213,16 +254,17 @@ module f2h_uart_tx(
 		.hps_io_hps_io_usb1_inst_DIR(HPS_USB_DIR),
 		.hps_io_hps_io_usb1_inst_NXT(HPS_USB_NXT),
 		
-		// HPS SPI pin connections
+		// HPS SPI1 pin connections
 		.hps_io_hps_io_spim1_inst_CLK(HPS_SPIM_CLK),
 		.hps_io_hps_io_spim1_inst_MOSI(HPS_SPIM_MOSI),
 		.hps_io_hps_io_spim1_inst_MISO(HPS_SPIM_MISO),
 		.hps_io_hps_io_spim1_inst_SS0(HPS_SPIM_SS),
 		
-		// HPS I2C1 pin connections
+		// HPS I2C0 pin connections
 		.hps_io_hps_io_i2c0_inst_SDA(HPS_I2C0_SDAT),
 		.hps_io_hps_io_i2c0_inst_SCL(HPS_I2C0_SCLK),
-		// HPS I2C2 pin connections
+		
+		// HPS I2C1 pin connections
 		.hps_io_hps_io_i2c1_inst_SDA(HPS_I2C1_SDAT),
 		.hps_io_hps_io_i2c1_inst_SCL(HPS_I2C1_SCLK),
 		
@@ -443,7 +485,7 @@ module f2h_uart_tx(
 	localparam UART_HELLO_MSG_LEN = 26;
 	localparam [8*UART_HELLO_MSG_LEN-1:0] uart_hello_msg = "Hello from the FPGA side\r\n";
 	localparam UART_ADDR_MSG_LEN = 12;
-	localparam [8*UART_ADDR_MSG_LEN-1:0] uart_addr_msg = "0xFFC020F8: ";
+	localparam [8*UART_ADDR_MSG_LEN-1:0] uart_addr_msg = "0xffc020f8: ";
 	reg [5:0] uart_msg_counter;  // Max value = 2^(5+1) - 1 = 63. Value must be equal or greater than longest message
 	
 	reg [3:0] state;

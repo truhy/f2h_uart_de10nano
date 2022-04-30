@@ -2,17 +2,15 @@
 	MIT License
 
 	Copyright (c) 2020 Truong Hy
-
+	
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
 	in the Software without restriction, including without limitation the rights
 	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 	copies of the Software, and to permit persons to whom the Software is
 	furnished to do so, subject to the following conditions:
-
 	The above copyright notice and this permission notice shall be included in all
 	copies or substantial portions of the Software.
-
 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,37 +18,37 @@
 	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 	SOFTWARE.
-
 	
 	
-    HDL    : Verilog
-    Target : For the DE-10 Nano Development Kit board (SoC FPGA Cyclone V)
-    Version: 2.1 public
 	
-    Transmit data using the HPS UART controller from the FPGA side - yes that's right from the FPGA side!
-    This is achieved on the FPGA side by directly reading and writing the hard-IP UART controller registers using
-    the AXI interface with the FPGA-to-HPS bridge.
-
-    Note: string literals in Quartus Verilog are stored with the left most character in the highest byte
-    position.  This code takes the input character string and transmits them in the reverse order, i.e.
-    from lowest byte position first because I think this is more natural.
-	 
-    Input parameters:
-        enable = 1 = start transmission, 0 = do nothing
-        input_type = selects data source type: 0 = data buffer register, 1 = memory address offset
-        data = register containing data to transmit.  Selected when input_type = 0
-        addr = address of memory containing data to transmit.  Selected when input_type = 1.  Address must be 32-bit aligned, i.e. must be a multiple of 4
-        len = length of transmit data in bytes
-        hex = converts bytes into hex string: 0 = no, 1 = yes
-        hex_start = start position to convert into hex string
-        new_line = transmit new line at the end: 0 = no, 1 = yes
-        
-    Output parameters:
-        status = 0 = none, 1 = busy, 2 = done
-            
-    References:
-        - Cyclone V Hard Processor System Technical Reference Manual
-        - Cyclone V Device Handbook Volume 1 Device Interfaces and Integration
+	HDL    : Verilog
+	Target : For the DE-10 Nano Development Kit board (SoC FPGA Cyclone V)
+	Version: 2.1 public
+    
+	Description:
+		Transmit data using the HPS UART controller from the FPGA side - yes that's right from the FPGA side!
+		This is achieved on the FPGA side by directly reading and writing the hard-IP UART controller
+		registers using the AXI interface with the FPGA-to-HPS bridge.  Note: string literals in Quartus
+		Verilog are stored with the left most character in the highest byte position.  This code takes the
+		input character string and transmits them in the reverse order, i.e. from lowest byte position first
+		because I think this is more natural.
+	
+	Input ports:
+		enable = 1 = start transmission, 0 = do nothing
+		input_type = selects data source type: 0 = data buffer register, 1 = memory address offset
+		data = register containing data to transmit.  Selected when input_type = 0
+		addr = address of memory containing data to transmit.  Selected when input_type = 1.  Address must be 32-bit aligned, i.e. must be a multiple of 4
+		len = length of transmit data in bytes
+		hex = converts bytes into hex string: 0 = no, 1 = yes
+		hex_start = start position to convert into hex string
+		new_line = transmit new line at the end: 0 = no, 1 = yes
+		
+	Output ports:
+		status = 0 = none, 1 = busy, 2 = done
+		
+	References:
+		-	Cyclone V Hard Processor System Technical Reference Manual
+		-	Cyclone V Device Handbook Volume 1 Device Interfaces and Integration
 */
 module uart_dev #(
 	UART_BASE_ADDR = 32'hFFC02000,

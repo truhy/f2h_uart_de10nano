@@ -565,7 +565,7 @@ module f2h_uart_tx(
 					endcase
 				end
 				
-				// STATE: transmit to RAM content (4 bytes in hex format) to UART
+				// STATE: transmit RAM content (4 bytes in hex format) to UART
 				4: begin
 					case(uart_status)
 						0: begin

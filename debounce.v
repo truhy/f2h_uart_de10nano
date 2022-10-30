@@ -3,22 +3,27 @@ module debounce
 	parameter CLK_CNT_WIDTH = 24,
 	parameter SW_WIDTH = 1
 )(
+	input rst,
 	input clk,
 	input [CLK_CNT_WIDTH-1:0] div,
-	input [SW_WIDTH-1:0] sw,
-	output slow_clk_out,
-	output reg [SW_WIDTH-1:0] sw_out
+	input [SW_WIDTH-1:0] sw_in,
+	output reg [SW_WIDTH-1:0] sw_out,
+	output slow_clk_out
 );
-	always @ (posedge slow_clk_out) begin
-		sw_out <= sw;
-	end
-	
 	clk_div
-	#(CLK_CNT_WIDTH)
+	#(.CLK_CNT_WIDTH(CLK_CNT_WIDTH))
 	clk_div_inst(
-		clk,
-		div,
-		0,
-		slow_clk_out
+		.rst(rst),
+		.clk(clk),
+		.div(div),
+		.clk_out(slow_clk_out)
 	);
+
+	always @ (posedge clk or posedge rst) begin
+		if(rst) begin
+			sw_out <= 0;
+		end else if(slow_clk_out) begin
+			sw_out <= sw_in;
+		end
+	end
 endmodule

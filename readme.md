@@ -2,7 +2,7 @@
 
 ## Overview
 
-This contains a Quartus Prime Verilog HDL project that demonstrates the FPGA portion directly sending a serial message to the existing UART-USB which is wired to the HPS side on the DE10-Nano board.  It does so by accessing the HPS UART0 controller (hard-IP) over the FPGA-to-HPS bridge.  This initial version relies on the sdcard with U-Boot to configure the serial port during its boot up.  For the next version, I'll try to remove the need for the sdcard.
+This contains a Quartus Prime Verilog HDL project that demonstrates the FPGA portion directly sending a serial message using the on-board UART-USB which is wired to the HPS side on the DE10-Nano board.  It does so by accessing the HPS UART0 controller (hard-IP) over the FPGA-to-HPS bridge.  This relies on the sdcard with U-Boot to configure the FPGA-to-HPS bridge and serial port during its boot up.
 
 ## Running instructions
 
@@ -26,17 +26,16 @@ Note, I've configured U-Boot so it doesn't boot to a Linux system or a user bare
 | sdcard_image/sdcard_de10nano.img | A prebuilt SD card image                            |
 | f2h_uart_tx.qpf                  | Quartus Prime project file                          |
 | f2h_uart_tx.qsf                  | Quartus Prime settings file                         |
-| f2h_uart_tx.v                    | Top level Verilog file                              |
+| top.v                            | Top level Verilog file                              |
 | uart_dev.v                       | UART device Verilog module                          |
 | rd_axi.v                         | Basic read axi helper Verilog module                |
 | wr_axi.v                         | Basic write axi helper Verilog module               |
-| clk_div.v                        | Clock divider for debounce Verilog module           |
+| clk_div.v                        | Clock divider for creating slow clocks              |
 | debounce.v                       | Key or switch debounce Verilog module               |
-| debounce_profile0.v              | Debounce with profile0 preset values Verilog module |
 
 ## The SD card image is built using the following software versions
 
-- [Ubuntu 20.04.1 LTS 64bit](https://ubuntu.com/download/desktop)
+- [Ubuntu 22.04.1 LTS 64bit](https://ubuntu.com/download/desktop)
 - [Quartus Prime 21.1 Lite Edition for Linux](https://www.intel.co.uk/content/www/uk/en/software/programmable/quartus-prime/download.html)
 - [Quartus SoC EDS 20.1 for Linux](https://fpgasoftware.intel.com/soceds)
 - [U-Boot source, tag v2022.01](https://github.com/u-boot/u-boot/tree/v2022.01)

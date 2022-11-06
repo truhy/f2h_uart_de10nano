@@ -59,4 +59,4 @@ Alternatively use my bash shell scripts and patch files located in the scripts f
 ## For more info and other projects
 
 Visit my personal website for a little more info at:<br />
-https://trueapps.co.uk/F2hUart
+https://truhy.co.uk

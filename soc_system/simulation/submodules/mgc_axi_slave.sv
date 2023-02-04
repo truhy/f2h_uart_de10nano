@@ -1,6 +1,6 @@
 // *****************************************************************************
 //
-// Copyright 2007-2019 Mentor Graphics Corporation
+// Copyright 2007-2021 Mentor Graphics Corporation
 // All Rights Reserved.
 //
 // THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION WHICH IS THE PROPERTY OF
@@ -242,6 +242,8 @@ interface mgc_axi_slave #(int AXI_ADDRESS_WIDTH = 64,
         `call_for_axi_bfm(set_config_read_data_reordering_depth)(READ_DATA_REORDERING_DEPTH);
         `call_for_axi_bfm(set_config_is_issuing)(0);
     end
+    bit expected_burst;
+    event burst_ev;
 
 `ifdef _MGC_VIP_VHDL_INTERFACE
     // Port-signal assignment
@@ -2218,6 +2220,12 @@ interface mgc_axi_slave #(int AXI_ADDRESS_WIDTH = 64,
             data_delay_after_address = (trans.data_ready_delay[0] - trans.address_ready_delay);
 
           wait_on(AXI_CLOCK_NEGEDGE);
+
+          // For a race condition in IUS when continuous transactions with
+          // burst_length 0 and data with address are run, triggering this
+          // event here will not affect any other case.
+          -> burst_ev;
+
           do  
           begin
             wait(AWVALID === 1'b1);
@@ -2239,42 +2247,63 @@ interface mgc_axi_slave #(int AXI_ADDRESS_WIDTH = 64,
               wait_on(AXI_CLOCK_POSEDGE);
             join_any
 
-            if ((WVALID === 1'b1) && (WID === AWID) && (fn_check_data_pending_for_id(WID) == 1'b0))
+            if ((WVALID === 1'b1) && (WID === AWID))
             begin
-              detected_corresponding_data_phase = 1'b1;
-              loop_end = 1'b1;
+              bit break_if;
 
-              if (trans.data_beat_done.size() == 0)
-                trans.data_beat_done = new[1];
-
-              trans.data_beat_done[0] = 1;
-
-              if (trans.data_words.size() == 0)
-                trans.data_words = new[1];
-
-              if (trans.write_strobes.size() == 0)
-                trans.write_strobes = new[1];
-
-              fork
-              begin
-                wait_on(AXI_CLOCK_POSEDGE);
-                trans.data_words[0]    = WDATA;
-                trans.write_strobes[0] = WSTRB;
+              // For a race condition in IUS when continuos transactions are
+              // run with burts_length > 0 and data with addr as the
+              // write_data_burst is waited for in
+              // fn_check_data_pending_for_id, thus it should be ensured that
+              // the burst has completed.
+              if(expected_burst) begin
+                wait(burst_ev.triggered);
+                break_if = fn_check_data_pending_for_id(WID);
               end
-              join_none
+              else begin
+                break_if = fn_check_data_pending_for_id(WID);
+              end
 
-              if (!((AWREADY === 1'b1) && (data_delay_after_address == 0)))
-              begin
+              if(!break_if) begin
+                detected_corresponding_data_phase = 1'b1;
+                loop_end = 1'b1;
+
+                if (trans.data_beat_done.size() == 0)
+                  trans.data_beat_done = new[1];
+
+                trans.data_beat_done[0] = 1;
+
+                if (trans.data_words.size() == 0)
+                  trans.data_words = new[1];
+
+                if (trans.write_strobes.size() == 0)
+                  trans.write_strobes = new[1];
+
                 fork
-                  begin
-                    `call_for_axi_bfm(dvc_put_write_channel_ready)(
-                      QUESTA_MVC::QUESTA_MVC_COMMS_SENT,
-                      `call_for_axi_bfm(get_axi_slave_end)(),
-                      1'b0
-                    );
-                  end
+                begin
+                  wait_on(AXI_CLOCK_POSEDGE);
+                  trans.data_words[0]    = WDATA;
+                  trans.write_strobes[0] = WSTRB;
+                end
                 join_none
+
+                if (!((AWREADY === 1'b1) && (data_delay_after_address == 0)))
+                begin
+                  fork
+                    begin
+                      `call_for_axi_bfm(dvc_put_write_channel_ready)(
+                        QUESTA_MVC::QUESTA_MVC_COMMS_SENT,
+                        `call_for_axi_bfm(get_axi_slave_end)(),
+                        1'b0
+                      );
+                    end
+                  join_none
+                end
               end
+              else if (AWREADY === 1'b1)
+                loop_end = 1'b1;
+              else if (WVALID === 1'b1)
+                wait_on(AXI_CLOCK_POSEDGE);
             end
             else if (AWREADY === 1'b1)
               loop_end = 1'b1;
@@ -2426,7 +2455,7 @@ interface mgc_axi_slave #(int AXI_ADDRESS_WIDTH = 64,
                 trans.write_strobes[index],
                 trans.id,
                 tmp_data_ready_delay
-              );
+               );
             while ((trans.id != trans_id) && ((index > 0) || (trans.write_data_mode == AXI_DATA_AFTER_ADDRESS)));
 
             trans.data_beat_done[index] = 1'b1;
@@ -2718,7 +2747,6 @@ interface mgc_axi_slave #(int AXI_ADDRESS_WIDTH = 64,
 
     // Internal
     bit [((AXI_ID_WIDTH) - 1):0] q_write_id[$];
-
     // Internal
     initial
     begin
@@ -2737,6 +2765,22 @@ interface mgc_axi_slave #(int AXI_ADDRESS_WIDTH = 64,
           tmp_config_max_outstanding_rd = get_config(AXI_CONFIG_MAX_OUTSTANDING_RD);
           `call_for_axi_bfm(wait_for_config_max_outstanding_rd)();
         end
+`ifndef _MGC_VIP_VHDL_INTERFACE
+`ifndef VCS
+        // expected to receive a completed burst
+        forever
+        begin
+          if(expected_burst)
+            wait_on(AXI_CLOCK_NEGEDGE);
+          expected_burst = 0;
+          wait((WVALID == 1'b1) && (WREADY == 1'b1) && (WLAST == 1'b1));
+          wait_on(AXI_CLOCK_NEGEDGE);
+          // To ensure burst end at the clock edge
+          if((WVALID == 1'b1) && (WREADY == 1'b1) && (WLAST == 1'b1))
+            expected_burst = 1;
+        end
+`endif
+`endif
       join
     end
 
@@ -2806,7 +2850,6 @@ interface mgc_axi_slave #(int AXI_ADDRESS_WIDTH = 64,
         // To avoid race condition with IUS, in case of data with address for
         // burst length 0
         #0;
-
         id_found = 1'b0;
 
         for (int i = 0; i < q_write_id.size(); i++)
@@ -2823,6 +2866,8 @@ interface mgc_axi_slave #(int AXI_ADDRESS_WIDTH = 64,
           q_write_id.delete(id_index);
         else  // ERROR
           $display("%0t: %m: INTERNAL ERROR - [SLAVE] Write data burst received for id, entry for which does not exist in queue", $time);
+
+        -> burst_ev;
       end
     endtask
 

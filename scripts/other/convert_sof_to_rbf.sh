@@ -3,5 +3,5 @@
 chmod +x ../parameters.sh
 source ../parameters.sh
 
-$QUARTUS_ROOTDIR/bin/quartus_cpf -c -o bitstream_compression=on ../../output_files/f2h_uart_tx.sof soc_system.rbf
+$QUARTUS_BIN/quartus_cpf -c -o bitstream_compression=on ../../output_files/f2h_uart_tx.sof soc_system.rbf
 

@@ -1,4 +1,4 @@
-// (C) 2001-2020 Intel Corporation. All rights reserved.
+// (C) 2001-2022 Intel Corporation. All rights reserved.
 // Your use of Intel Corporation's design tools, logic functions and other 
 // software and tools, and its AMPP partner logic functions, and any output 
 // files from any of the foregoing (including device programming or simulation 
@@ -11,10 +11,10 @@
 // agreement for further details.
 
 
-// $File: //acds/rel/20.1std/ip/sopc/components/verification/altera_avalon_mm_slave_bfm/altera_avalon_mm_slave_bfm.sv $
-// $File: //acds/rel/20.1std/ip/sopc/components/verification/altera_avalon_mm_slave_bfm/altera_avalon_mm_slave_bfm.sv $
+// $File: //acds/rel/22.1std/ip/sopc/components/verification/altera_avalon_mm_slave_bfm/altera_avalon_mm_slave_bfm.sv $
+// $File: //acds/rel/22.1std/ip/sopc/components/verification/altera_avalon_mm_slave_bfm/altera_avalon_mm_slave_bfm.sv $
 // $Revision: #1 $
-// $Date: 2019/10/06 $
+// $Date: 2021/10/27 $
 // $Author: psgswbuild $
 //-----------------------------------------------------------------------------
 // =head1 NAME
@@ -312,7 +312,7 @@ module altera_avalon_mm_slave_bfm(
    
    function automatic string get_version();  // public
       // Return BFM version string. For example, version 9.1 sp1 is "9.1sp1" 
-      string ret_version = "20.1";
+      string ret_version = "22.1";
       return ret_version;            
    endfunction
    
@@ -1045,7 +1045,7 @@ BFM will reset the wait cycles to 1");
       print(VERBOSITY_INFO, message);            
       $sformat(message, "%m: -   $Revision: #1 $");
       print(VERBOSITY_INFO, message);            
-      $sformat(message, "%m: -   $Date: 2019/10/06 $");
+      $sformat(message, "%m: -   $Date: 2021/10/27 $");
       print(VERBOSITY_INFO, message);
       $sformat(message, "%m: -   AV_ADDRESS_W             = %0d", 
                AV_ADDRESS_W);

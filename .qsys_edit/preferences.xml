@@ -3,11 +3,12 @@
  <debug showDebugMenu="0" />
  <systemtable filter="All Interfaces">
   <columns>
-   <connections preferredWidth="95" />
+   <connections preferredWidth="127" />
    <irq preferredWidth="34" />
    <inputclock preferredWidth="143" />
   </columns>
  </systemtable>
- <library expandedCategories="Library,Project" />
+ <library
+   expandedCategories="Project,Library/Basic Functions/Bridges and Adaptors/Interrupt,Library/Basic Functions,Library,Library/Qsys Interconnect,Library/Basic Functions/Bridges and Adaptors,Library/Qsys Interconnect/Memory-Mapped,Library/Qsys Interconnect/Interrupt,Library/Qsys Interconnect/Memory-Mapped Alpha" />
  <window width="1399" height="856" x="56" y="27" />
 </preferences>

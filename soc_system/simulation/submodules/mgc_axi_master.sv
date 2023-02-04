@@ -1,6 +1,6 @@
 // *****************************************************************************
 //
-// Copyright 2007-2019 Mentor Graphics Corporation
+// Copyright 2007-2021 Mentor Graphics Corporation
 // All Rights Reserved.
 //
 // THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION WHICH IS THE PROPERTY OF

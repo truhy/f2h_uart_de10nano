@@ -1,7 +1,7 @@
 	component soc_system is
 		port (
 			clk_clk                         : in    std_logic                     := 'X';             -- clk
-			hps_0_f2h_axi_clock_clk         : in    std_logic                     := 'X';             -- clk
+			clock_bridge_0_out_clk_clk      : out   std_logic;                                        -- clk
 			hps_0_f2h_axi_slave_awid        : in    std_logic_vector(7 downto 0)  := (others => 'X'); -- awid
 			hps_0_f2h_axi_slave_awaddr      : in    std_logic_vector(31 downto 0) := (others => 'X'); -- awaddr
 			hps_0_f2h_axi_slave_awlen       : in    std_logic_vector(3 downto 0)  := (others => 'X'); -- awlen
@@ -100,7 +100,6 @@
 			memory_mem_dm                   : out   std_logic_vector(3 downto 0);                     -- mem_dm
 			memory_oct_rzqin                : in    std_logic                     := 'X';             -- oct_rzqin
 			pll_0_locked_export             : out   std_logic;                                        -- export
-			pll_0_outclk0_clk               : out   std_logic;                                        -- clk
 			reset_reset_n                   : in    std_logic                     := 'X'              -- reset_n
 		);
 	end component soc_system;

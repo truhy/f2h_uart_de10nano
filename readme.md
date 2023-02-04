@@ -17,7 +17,7 @@ This contains a Quartus Prime Verilog HDL project that demonstrates the FPGA por
 6. If the FPGA is configured LED7 should be blinking now
 7. Press and release key0 on the DE10-Nano and you should see a hello message - this comes directly from the FPGA side!
 
-Note, I've configured U-Boot so it doesn't boot to a Linux system or a user baremetal application.
+Note, I've configured U-Boot to boot only to it's command console.
 
 ## Main files
 
@@ -36,8 +36,7 @@ Note, I've configured U-Boot so it doesn't boot to a Linux system or a user bare
 ## The SD card image is built using the following software versions
 
 - [Ubuntu 22.04.1 LTS 64bit](https://ubuntu.com/download/desktop)
-- [Quartus Prime 21.1 Lite Edition for Linux](https://www.intel.co.uk/content/www/uk/en/software/programmable/quartus-prime/download.html)
-- [Quartus SoC EDS 20.1 for Linux](https://fpgasoftware.intel.com/soceds)
+- [Quartus Prime 22.1 Lite Edition for Linux](https://www.intel.co.uk/content/www/uk/en/software/programmable/quartus-prime/download.html)
 - [U-Boot source, tag v2022.01](https://github.com/u-boot/u-boot/tree/v2022.01)
 - [GNU Arm Embedded Toolchain 10.3-2021.07 for Linux x86 64](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-a/downloads)
 

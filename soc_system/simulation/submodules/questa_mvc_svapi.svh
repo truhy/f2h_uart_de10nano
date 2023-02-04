@@ -1,6 +1,6 @@
 //****************************************************************************
 //
-// Copyright 2007-2018 Mentor Graphics Corporation 
+// Copyright 2007-2021 Mentor Graphics Corporation 
 // All Rights Reserved.
 //
 // THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION WHICH IS THE PROPERTY OF 
@@ -18,33 +18,9 @@ package QUESTA_MVC;
 
 /* Group: Base Types */
 
-// Handle for Transactions
-typedef chandle questa_mvc_transaction_handle;
-
-
-// Iterator to refer to Questa MVC Core objects
-typedef chandle questa_mvc_iterator;
-
-
-// Handle for external databases opened via Questa MVC
-typedef chandle questa_mvc_external_db;
-
-
-// Enum for controlling the output of the 'show_item' task
-typedef enum 
-{
-    QUESTA_MVC_SHOW_ALL = 0,
-    QUESTA_MVC_SHOW_LINE,
-    QUESTA_MVC_SHOW_BASIC,
-    QUESTA_MVC_SHOW_DATA,
-    QUESTA_MVC_SHOW_STORAGE,
-    QUESTA_MVC_SHOW_COMPLEXITY
-} questa_mvc_show_content_enum;
-
-
 /* Enum: questa_mvc_timecale_enum
 
-An enum for specifying time-units, used by <questa_mvc_sv_convert_to_precision>.
+An enum for specifying time-units, used by <questa_mvc_sv_convert_to_precision> and <questa_mvc_sv_convert_real_to_precision>.
 
 QUESTA_MVC_TIME_AS   - Atto-seconds
 QUESTA_MVC_TIME_FS   - Femto-seconds
@@ -80,17 +56,6 @@ typedef enum
     QUESTA_MVC_TIME_X    = 14
 } questa_mvc_timecale_enum;
 
-
-// An enum for controlling the enabling/disabling of the ability of a Questa MVC item to do various actions
-typedef enum
-{
-    QUESTA_MVC_DISABLE_RECOGNITION = 'h1,
-    QUESTA_MVC_DISABLE_GENERATION  = 'h2,
-    QUESTA_MVC_DISABLE_ACTIVATION  = 'h4,
-    QUESTA_MVC_DISABLE_EXECUTION   = 'h8,
-    QUESTA_MVC_DISABLE_PARAMETERS  = 'h10,
-    QUESTA_MVC_DISABLE_ALL         = 'hF
-} questa_mvc_item_disable_enum ;
 
 /* Enum: questa_mvc_item_comms_semantic
 
@@ -167,6 +132,8 @@ QUESTA_MVC_INTERFACE_CONFIG_GET_TIME_PRECISION_SCALE - Obtain the time scale use
 QUESTA_MVC_INTERFACE_CONFIG_GET_TIME_UNIT_SCALE      - Obtain the time scale used for time unit values
 QUESTA_MVC_INTERFACE_CONFIG_GET_ASSERTION_FAILS      - Obtain the number of fails for the given (or all) assertions
 QUESTA_MVC_INTERFACE_CONFIG_ERROR_SEVERITY           - Change the severity of an automatic error.
+QUESTA_MVC_INTERFACE_CONFIG_ZERO_ACTIVITY_DELAY      - For zero delay from the activity
+QUESTA_MVC_INTERFACE_CONFIG_ZERO_INTERFACE_DELAY     - For new delta
 */
 typedef enum
 {
@@ -185,7 +152,22 @@ typedef enum
     QUESTA_MVC_INTERFACE_CONFIG_GET_TIME_PRECISION_SCALE = 12,
     QUESTA_MVC_INTERFACE_CONFIG_GET_TIME_UNIT_SCALE = 13,
     QUESTA_MVC_INTERFACE_CONFIG_GET_ASSERTION_FAILS = 14,
-    QUESTA_MVC_INTERFACE_CONFIG_ERROR_SEVERITY = 15
+    QUESTA_MVC_INTERFACE_CONFIG_ERROR_SEVERITY = 15,
+    QUESTA_MVC_INTERFACE_CONFIG_ZERO_ACTIVITY_DELAY = 16,
+    QUESTA_MVC_INTERFACE_CONFIG_ZERO_INTERFACE_DELAY = 17,
+    QUESTA_MVC_INTERFACE_CONFIG_PRINT_CONFIGURATION_BASIC = 101,
+    QUESTA_MVC_INTERFACE_CONFIG_PRINT_CONFIGURATION_ADVANCED = 102,
+    QUESTA_MVC_INTERFACE_CONFIG_PRINT_CONFIGURATION_ALL = 103,
+    QUESTA_MVC_INTERFACE_CONFIG_PRINT_SIMULATION_STATS_BASIC = 111,
+    QUESTA_MVC_INTERFACE_CONFIG_PRINT_SIMULATION_STATS_ADVANCED = 112,
+    QUESTA_MVC_INTERFACE_CONFIG_PRINT_SIMULATION_STATS_ALL = 113,
+    QUESTA_MVC_INTERFACE_CONFIG_PRINT_STATUS_BASIC = 114,
+    QUESTA_MVC_INTERFACE_CONFIG_PRINT_STATUS_ADVANCED = 115,
+    QUESTA_MVC_INTERFACE_CONFIG_PRINT_STATUS_ALL = 116,
+    QUESTA_MVC_INTERFACE_CONFIG_LOGGER_ENABLE = 117,
+    QUESTA_MVC_INTERFACE_CONFIG_LOGGER_FILE = 118,
+    QUESTA_MVC_INTERFACE_CONFIG_LOGGER_DIRECTORY = 119,
+    QUESTA_MVC_INTERFACE_CONFIG_LOGGER_STYLE = 120
 } questa_mvc_interface_config;
 
 
@@ -217,102 +199,7 @@ typedef enum
     QUESTA_MVC_ALL_ASSERTIONS    = 10000
 } questa_mvc_assertions;
 
-// Class used to represent time in SystemVerilog and enable conversion to Questa MVC simulation time units
-class questa_mvc_time;
-
-    longint                     m_time_value;
-    questa_mvc_timecale_enum    m_time_unit;
-
-    function new( longint time_value, questa_mvc_timecale_enum time_unit );
-        m_time_value    = time_value;
-        m_time_unit     = time_unit;
-    endfunction
-
-    function longint convert_to_precision();
-        return questa_mvc_sv_convert_to_precision( m_time_value, m_time_unit );
-    endfunction
-
-endclass
-
 /* Group: Global Functions */
-
-// Function for returning a handle for iterating over Questa MVC objects whose names match the given pattern for hierarchical names
-import "DPI-C"  questa_mvc_sv_find = function questa_mvc_iterator questa_mvc_find(input string pattern);
-
-// Function for testing a handle to see if it points to a valid Questa MVC object
-import "DPI-C"  questa_mvc_sv_valid = function bit questa_mvc_valid_handle(input questa_mvc_iterator iter);
-
-// Function for advancing a Questa MVC handle to point to the next Questa MVC object satisfying the pattern
-import "DPI-C"  questa_mvc_sv_advance = function void questa_mvc_advance_handle(input questa_mvc_iterator iter);
-
-// Function for releasing a Questa MVC handle after use. DO NOT USE THE HANDLE AFTER CALLING THIS.
-import "DPI-C"  questa_mvc_sv_release = function void questa_mvc_release_handle(inout questa_mvc_iterator iter);
-
-// Function for returning the name of the Questa MVC object pointed to by the Questa MVC handle
-import "DPI-C"  questa_mvc_sv_name = function string questa_mvc_name_from_iterator(input questa_mvc_iterator iter);
-
-// Function for opening an external database for saving history. Returns a handle to a Questa MVC object representing the external database. Deprecated - to be removed.
-function questa_mvc_external_db questa_mvc_hist_create(input string db_type,input  string fileName); return null; endfunction
-
-// Function for closing an external database. Returns 1 if successful, 0 otherwise. Deprecated - to be removed.
-function bit questa_mvc_hist_close(input questa_mvc_external_db db); return 0; endfunction
-
-// Function for telling a Questa MVC object (pointed to by the handle) to add its history to an external database during simulation. Returns 1 if successful, 0 otherwise. Deprecated - to be removed.
-function bit questa_mvc_hist_add(input questa_mvc_iterator iter,input questa_mvc_external_db db); return 0; endfunction
-
-// Function for telling all Questa MVC objects whose names satisfy a pattern to add their history to the external database during simulation. Returns 1 if successful, 0 otherwise. Deprecated - to be removed.
-function bit questa_mvc_hist_add_pattern(input string pattern,input questa_mvc_external_db db); return 0; endfunction
-
-// Function for telling a Questa MVC object (pointed to by the handle) to cancel adding its history to an external database during simulation. Returns 1 if successful, 0 otherwise. Deprecated - to be removed.
-function bit questa_mvc_hist_cancel(input questa_mvc_iterator iter,input questa_mvc_external_db db); return 0; endfunction
-
-// Function for telling all Questa MVC objects whose names satisfy a pattern to cancel adding their history to the external database during simulation. Returns 1 if successful, 0 otherwise. Deprecated - to be removed.
-function bit questa_mvc_hist_cancel_pattern(input string pattern,input questa_mvc_external_db db); return 0; endfunction
-
-// Function for telling a Questa MVC object pointed to by a handle to record internally its history. Returns 1 if successful, 0 otherwise. Deprecated - to be removed.
-function bit questa_mvc_hist_record(input questa_mvc_iterator iter,input int hist_number); return 0; endfunction
-
-// Function for telling all Questa MVC objects whose names satisfy a pattern to record internally its history. Returns 1 if successful, 0 otherwise. Deprecated - to be removed.
-function bit questa_mvc_hist_record_pattern(input string pattern,input int hist_number); return 0; endfunction
-
-// Function for new item within the given hierarchy. Returns a handle to a Questa MVC object representing the item
-function longint unsigned questa_mvc_item_create(input string name,input string hierarchy); return 0; endfunction
-
-// Function for giving the handle to the given item with full hierarchy. Returns a handle to a Questa MVC object representing the item. Deprecated - to be removed.
-function longint unsigned questa_mvc_item_handle(input string name); return 0; endfunction
-
-// Function for giving the full hierarchic name of the item referred to by the handle. Returns the string name of the item
-import "DPI-C"  questa_mvc_sv_item_name = function string questa_mvc_item_name(input longint unsigned handle);
-
-// Function for giving the parameter values of the item referred to by the handle. Returns the string containing the parameter values
-import "DPI-C"  questa_mvc_sv_item_params = function string questa_mvc_item_params(input longint unsigned handle);
-
-// Function for new instance of the item. Returns a handle to a Questa MVC object representing the instance. Deprecated - to be removed.
-function longint unsigned questa_mvc_item_begin(input longint unsigned handle, input string inst_name, input longint begin_time); return 0; endfunction
-
-// Function for adding textual history to an instance of the item. Returns 1 if successful, 0 otherwise. Deprecated - to be removed.
-function bit questa_mvc_item_history(input longint unsigned handle,input string history); return 0; endfunction
-
-// Function for ending an instance of the item. Returns 1 if successful, 0 otherwise. Deprecated - to be removed
-function bit questa_mvc_item_end(input longint unsigned handle,input longint end_time); return 0; endfunction
-
-// Function for finishing an instance of the item. Returns 1 if successful, 0 otherwise. Deprecated - to be removed.
-function bit questa_mvc_item_finish(input longint unsigned handle); return 0; endfunction
-
-// Function for linking an instance of the item to an instance of another item. Returns 1 if successful, 0 otherwise. Deprecated - to be removed.
-function bit questa_mvc_item_link(input longint unsigned src_handle,input longint unsigned dst_handle); return 0; endfunction
-
-// Function for counting the number of items linked to an instance of the item. Returns the count
-import "DPI-C"  questa_mvc_sv_item_linked_count = function int questa_mvc_item_linked_count(input longint unsigned handle);
-
-// Function for obtaining handles to the items linked to an instance of the item. Returns 1 if successful, 0 otherwise
-import "DPI-C"  questa_mvc_sv_item_linked_handles = function bit questa_mvc_item_linked_handles(input longint unsigned handle, inout longint unsigned handles[]);
-
-// Function for obtaining the being time of an instance of the item. Returns the begin time
-import "DPI-C"  questa_mvc_sv_item_time_begin = function longint questa_mvc_item_time_begin(input longint unsigned handle);
-
-// Function for obtainign the end time of an instance of the item. Returns the end time
-import "DPI-C"  questa_mvc_sv_item_time_end = function longint questa_mvc_item_time_end(input longint unsigned handle);
 
 // Function for printing a summary of the state of Questa MVC.
 import "DPI-C"  questa_mvc_sv_show = function void questa_mvc_show( string show_command );
@@ -320,10 +207,7 @@ import "DPI-C"  questa_mvc_sv_show = function void questa_mvc_show( string show_
 // Function to run a command.
 import "DPI-C"  questa_mvc_sv_do_cmd = function void questa_mvc_do_cmd( string command );
 
-`ifndef INCA
-// Function for printing the details of a Questa MVC object pointed to by the handle. Then enum controls the detail.
-import "DPI-C"  questa_mvc_sv_show_item = function void questa_mvc_show_item(input questa_mvc_iterator iter,input questa_mvc_show_content_enum content);
-
+`ifndef XCELIUM
 /* Function: questa_mvc_sv_convert_to_precision
 
 A function for calculating the number of simulator time-steps (the smallest of all timeprecision declarations in the design) 
@@ -334,8 +218,19 @@ time_unit - an enum (of type <questa_mvc_timecale_enum>), specifying the time-un
 */
 import "DPI-C"  questa_mvc_sv_convert_to_precision = function longint questa_mvc_sv_convert_to_precision( longint time_value, questa_mvc_timecale_enum time_unit );
 
+/* Function: questa_mvc_sv_convert_real_to_precision
+
+A function for calculating the number of simulator time-steps (the smallest of all timeprecision declarations in the design) 
+corresponding to an absolute time interval. See <Configuration of Time-Units> for a description of the use of this function.
+
+time_value - a real giving the number of time-units required
+time_unit - an enum (of type <questa_mvc_timecale_enum>), specifying the time-unit 
+*/
+import "DPI-C"  questa_mvc_sv_convert_real_to_precision = function real questa_mvc_sv_convert_real_to_precision( real time_value, questa_mvc_timecale_enum time_unit );
+
 `else
 import "DPI-C"  questa_mvc_sv_convert_to_precision = function longint questa_mvc_sv_convert_to_precision( longint time_value, int time_unit );
+import "DPI-C"  questa_mvc_sv_convert_real_to_precision = function real questa_mvc_sv_convert_real_to_precision( real time_value, int time_unit );
 `endif
 
 // Function for getting the version of the Questa Verification IP.
@@ -346,6 +241,26 @@ import "DPI-C"  questa_vip_get_platform = function string questa_vip_get_platfor
 
 // Function for getting the installation path for the Questa Verification IP. NOTE - If QVIP_HOME is defined in the environment, then that is returned, irrespective of the actual location.
 import "DPI-C"  questa_mvc_sv_home = function string questa_mvc_home();
+
+
+/* Group: Deprecated functions
+ *
+ * These are left to allow existing test benches to compile, but they do nothing beyond return a default value.
+ */
+
+function bit              questa_mvc_hist_record_pattern(input string pattern,input int hist_number);  return 1'b0; endfunction
+function longint unsigned questa_mvc_item_create(input string name,input string hierarchy);            return 0;    endfunction
+function string           questa_mvc_item_name(input longint unsigned handle);                         return "";   endfunction
+function string           questa_mvc_item_params(input longint unsigned handle);                       return "";   endfunction
+function longint unsigned questa_mvc_item_begin(input longint unsigned handle, input string inst_name, input longint begin_time); return 0; endfunction
+function bit              questa_mvc_item_history(input longint unsigned handle,input string history); return 1'b0; endfunction
+function bit              questa_mvc_item_end(input longint unsigned handle,input longint end_time);   return 1'b0; endfunction
+function bit              questa_mvc_item_finish(input longint unsigned handle);                       return 1'b0; endfunction
+function bit              questa_mvc_item_link(input longint unsigned src_handle,input longint unsigned dst_handle); return 1'b0; endfunction
+function int              questa_mvc_item_linked_count(input longint unsigned handle);                 return 0;    endfunction
+function bit              questa_mvc_item_linked_handles(input longint unsigned handle, inout longint unsigned handles[]); return 1'b0; endfunction
+function longint          questa_mvc_item_time_begin(input longint unsigned handle);                   return 0;    endfunction
+function longint          questa_mvc_item_time_end(input longint unsigned handle);                     return 0;    endfunction
 
 // Static class, to print the Questa Verification IP Copyright Banner.
 // DO NOT MODIFY.
@@ -359,7 +274,7 @@ class Questa_Verification_IP_Banner #( string lib_version = "DEV" , string build
     $display("//  Questa Verification IP");
     $display("//  Version %s%s %s %s", lib_version, sim_version, platform, build_date);
     $display("//");
-    $display("//  Copyright 2007-2018 Mentor Graphics Corporation");
+    $display("//  Copyright 2007-2021 Mentor Graphics Corporation");
     $display("//  All Rights Reserved.");
     $display("//");
     $display("//  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION");
@@ -382,6 +297,12 @@ class questa_mvc_reporter;
     //
     // A string holding the name of this reporter
     string name;
+    
+    // Variable: reporters
+    //
+    // An array of questa_mvc_reporters, used to allow multiple reporters to be accessed
+    // from a single registration of a reporter with QVIP BFM interface
+    questa_mvc_reporter reporters[];
 
     // Function: new
     //
@@ -407,6 +328,24 @@ class questa_mvc_reporter;
     //
     virtual function void report_message(string category, string fileName, int lineNo, string objectName, string instanceName, string error_no, string typ, string mess);
         $display("%s %s-%s %s %s %s", typ, category, error_no, objectName, instanceName, mess);
+    endfunction
+
+    // Function: do_report_message
+    //
+    // This function will be called by the default implementation of report_message in mvc_reporter.
+    // It should be overloaded in order to customise the specific reporter behaviour
+    // 
+    virtual function void do_report_message(string category, string fileName, int lineNo, string objectName, string instanceName, string error_no, string typ, string mess);
+      report_message(category, fileName, lineNo, objectName, instanceName, error_no, typ, mess);
+    endfunction
+
+    // Function: add_reporter
+    // 
+    // This function is used to add a questa_mvc_reporter extension reporter to 
+    // the array of reporters. 
+    // 
+    virtual function void add_reporter(questa_mvc_reporter reporter);
+    
     endfunction
     
 endclass

@@ -1,11 +1,11 @@
 //IP Functional Simulation Model
-//VERSION_BEGIN 20.1 cbx_mgl 2020:06:05:12:11:10:SJ cbx_simgen 2020:06:05:12:04:51:SJ  VERSION_END
+//VERSION_BEGIN 22.1 cbx_mgl 2022:10:25:15:42:35:SC cbx_simgen 2022:10:25:15:32:10:SC  VERSION_END
 // synthesis VERILOG_INPUT_VERSION VERILOG_2001
 // altera message_off 10463
 
 
 
-// Copyright (C) 2020  Intel Corporation. All rights reserved.
+// Copyright (C) 2022  Intel Corporation. All rights reserved.
 // Your use of Intel Corporation's design tools, logic functions 
 // and other software and tools, and any partner logic 
 // functions, and any output files from any of the foregoing 
@@ -227,7 +227,7 @@ module  soc_system_pll_0
 		soc_system_pll_0_altera_pll_altera_pll_i_639.n_cnt_odd_div_duty_en = "false",
 		soc_system_pll_0_altera_pll_altera_pll_i_639.number_of_clocks = 1,
 		soc_system_pll_0_altera_pll_altera_pll_i_639.operation_mode = "direct",
-		soc_system_pll_0_altera_pll_altera_pll_i_639.output_clock_frequency0 = "150.000000 MHz",
+		soc_system_pll_0_altera_pll_altera_pll_i_639.output_clock_frequency0 = "80.000000 MHz",
 		soc_system_pll_0_altera_pll_altera_pll_i_639.output_clock_frequency1 = "0 MHz",
 		soc_system_pll_0_altera_pll_altera_pll_i_639.output_clock_frequency10 = "0 MHz",
 		soc_system_pll_0_altera_pll_altera_pll_i_639.output_clock_frequency11 = "0 MHz",

@@ -1,4 +1,4 @@
-// (C) 2001-2020 Intel Corporation. All rights reserved.
+// (C) 2001-2022 Intel Corporation. All rights reserved.
 // Your use of Intel Corporation's design tools, logic functions and other 
 // software and tools, and its AMPP partner logic functions, and any output 
 // files from any of the foregoing (including device programming or simulation 
@@ -164,7 +164,7 @@ module soc_system_hps_0_hps_io_border_memory
    
    function automatic string get_version();  // public
       // Return BFM version string. For example, version 9.1 sp1 is "9.1sp1" 
-      string ret_version = "20.1";
+      string ret_version = "22.1";
       return ret_version;
    endfunction
 

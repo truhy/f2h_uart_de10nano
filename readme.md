@@ -21,17 +21,17 @@ Note, I've configured U-Boot to boot only to it's command console.
 
 ## Main files
 
-| File                             | Description                                         |
-| -------------------------------- | --------------------------------------------------- |
-| sdcard_image/sdcard_de10nano.img | A prebuilt SD card image                            |
-| f2h_uart_tx.qpf                  | Quartus Prime project file                          |
-| f2h_uart_tx.qsf                  | Quartus Prime settings file                         |
-| top.v                            | Top level Verilog file                              |
-| uart_dev.v                       | UART device Verilog module                          |
-| rd_axi.v                         | Basic read axi helper Verilog module                |
-| wr_axi.v                         | Basic write axi helper Verilog module               |
-| clk_div.v                        | Clock divider for creating slow clocks              |
-| debounce.v                       | Key or switch debounce Verilog module               |
+| File                              | Description                                         |
+| --------------------------------- | --------------------------------------------------- |
+| Release/sd-out/f2h_uart_tx.sd.img | A prebuilt SD card image                            |
+| f2h_uart_tx.qpf                   | Quartus Prime project file                          |
+| f2h_uart_tx.qsf                   | Quartus Prime settings file                         |
+| top.v                             | Top level Verilog file                              |
+| uart_dev.v                        | UART device Verilog module                          |
+| rd_axi.v                          | Basic read axi helper Verilog module                |
+| wr_axi.v                          | Basic write axi helper Verilog module               |
+| clk_div.v                         | Clock divider for creating slow clocks              |
+| debounce.v                        | Key or switch debounce Verilog module               |
 
 ## The SD card image is built using the following software versions
 
